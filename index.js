@@ -19,12 +19,31 @@ async function run (){
       await client.connect();
       console.log("connect to dbDoctor");
       const serviceCollection = client.db("doctors_portal").collection("services");
+      const bookingCollection = client.db("doctors_portal").collection("bookings");
+
+      /**
+       * API naming convention
+       * app.get('/booking) // get all booking from collection or one by filter
+       * app.get('/booking/:id) // get a speacfic booking by id 
+       * app.post('/booking) // add a new booking 
+       * app.patch('/booking/:id) // update a speacfic booking 
+       * app.delete('/booking/:id) // delete a speacfic booking 
+        */
+      
       app.get("/services", async (req, res) => {
         const query = {};
         const cursor = serviceCollection.find(query);
         const services = await cursor.toArray();
         res.send(services);
       });
+
+      // post booking
+      app.post('/booking' , async(req,res) =>{
+          const booking = req.body;
+          const query = {treatment :booking.treatment , date: booking.date , patient:booking.patient}
+          const result = await bookingCollection.insertOne(booking);
+          res.send(result);
+      })
     }
     finally{
 
