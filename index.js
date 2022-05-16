@@ -60,12 +60,12 @@ async function run() {
       const services = await cursor.toArray();
       res.send(services);
     });
-    // all user
+    // get  all user 
     app.get("/user", verifyJWT, async (req, res) => {
       const users = await userCollection.find().toArray();
       res.send(users);
     });
-    // admin 
+    // admin route
     app.get('/admin/:email', async(req, res) =>{
       const email = req.params.email;
       const user = await userCollection.findOne({email: email});
